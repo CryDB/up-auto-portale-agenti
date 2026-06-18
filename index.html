@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UP Auto — Portale Agenti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  :root {
+    --brand: #4A4AAF;
+    --brand-dark: #383890;
+    --brand-light: #C4C0FF;
+    --accent: #FFD166;
+    --bg: #0F0F1A;
+    --surface: #1A1A2E;
+    --surface2: #22223A;
+    --border: #2E2E50;
+    --text: #E8E8F0;
+    --text-muted: #8888AA;
+    --success: #4ADE80;
+    --danger: #F87171;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 60% 40%, #1e1e4a 0%, #0F0F1A 70%);
+  }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  .login-logo { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--brand-light); margin-bottom: 8px; }
+  .login-logo span { color: var(--accent); }
+  .login-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 36px; }
+  .pin-label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; text-align: left; }
+  .pin-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 20px; font-family: 'Space Grotesk', sans-serif; letter-spacing: 8px; padding: 14px 20px; text-align: center; outline: none; transition: border-color 0.2s; }
+  .pin-input:focus { border-color: var(--brand); }
+  .login-btn { margin-top: 20px; width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+  .login-btn:hover { background: var(--brand-dark); }
+  .login-error { margin-top: 12px; font-size: 13px; color: var(--danger); display: none; }
+
+  /* TOPBAR */
+  #app { display: none; }
+  .topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(15,15,26,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; gap: 16px; z-index: 100; }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--brand-light); }
+  .topbar-logo span { color: var(--accent); }
+  .topbar-badge { font-size: 11px; font-weight: 600; background: var(--brand); color: #fff; padding: 3px 8px; border-radius: 20px; }
+  .topbar-nav { margin-left: auto; display: flex; gap: 4px; }
+  .nav-btn { background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .nav-btn:hover, .nav-btn.active { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { color: var(--brand-light); }
+
+  .main { padding-top: 60px; min-height: 100vh; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* AI CHAT */
+  .chat-container { max-width: 800px; margin: 0 auto; padding: 32px 20px; display: flex; flex-direction: column; height: calc(100vh - 60px); }
+  .chat-header { text-align: center; margin-bottom: 24px; flex-shrink: 0; }
+  .chat-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .chat-header p { font-size: 13px; color: var(--text-muted); }
+  .quick-questions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; flex-shrink: 0; }
+  .quick-q { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text-muted); font-size: 12px; padding: 6px 12px; cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .quick-q:hover { border-color: var(--brand); color: var(--brand-light); }
+  .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-bottom: 16px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .msg { display: flex; gap: 12px; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .msg-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .msg.user { flex-direction: row-reverse; }
+  .msg.user .msg-avatar { background: var(--brand); }
+  .msg.ai .msg-avatar { background: var(--surface2); border: 1px solid var(--border); }
+  .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: 14px; line-height: 1.6; }
+  .msg.user .msg-bubble { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; }
+  .msg.ai .msg-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; }
+  .typing { display: flex; align-items: center; gap: 5px; padding: 4px 0; }
+  .typing span { width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%; animation: bounce 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+  .chat-input-area { flex-shrink: 0; display: flex; gap: 10px; align-items: flex-end; padding-top: 12px; border-top: 1px solid var(--border); }
+  .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif; padding: 12px 16px; resize: none; outline: none; min-height: 48px; max-height: 140px; line-height: 1.5; transition: border-color 0.2s; }
+  .chat-input:focus { border-color: var(--brand); }
+  .chat-input::placeholder { color: var(--text-muted); }
+  .send-btn { background: var(--brand); border: none; border-radius: 12px; color: #fff; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+  .send-btn:hover { background: var(--brand-dark); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* DOCUMENTI */
+  .docs-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .section-header { margin-bottom: 32px; }
+  .section-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .section-header p { color: var(--text-muted); font-size: 14px; }
+  .docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .doc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: border-color 0.2s, transform 0.15s; }
+  .doc-card:hover { border-color: var(--brand); transform: translateY(-2px); }
+  .doc-icon { width: 40px; height: 40px; background: var(--brand); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .doc-name { font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .doc-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; flex: 1; }
+  .doc-download { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--brand-light); text-decoration: none; background: rgba(74,74,175,0.15); padding: 8px 12px; border-radius: 8px; transition: background 0.15s; }
+  .doc-download:hover { background: rgba(74,74,175,0.3); }
+
+  /* PROCEDURE */
+  .proc-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .proc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .proc-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; cursor: pointer; transition: all 0.15s; }
+  .proc-card:hover { border-color: var(--brand); transform: translateY(-2px); }
+  .proc-card-tag { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .proc-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
+  .proc-card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .proc-card-steps { margin-top: 12px; font-size: 12px; color: var(--brand-light); font-weight: 500; }
+  .proc-detail { display: none; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; }
+  .proc-detail.active { display: block; }
+  .proc-back { background: none; border: none; color: var(--text-muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-bottom: 20px; font-family: 'Inter', sans-serif; transition: color 0.15s; }
+  .proc-back:hover { color: var(--text); }
+  .proc-progress { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 24px; }
+  .proc-progress-bar { height: 100%; background: var(--brand); border-radius: 2px; transition: width 0.3s ease; }
+  .proc-detail-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+  .step-list { display: flex; flex-direction: column; gap: 16px; }
+  .step-item { display: flex; gap: 14px; align-items: flex-start; }
+  .step-num { width: 30px; height: 30px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; color: #fff; }
+  .step-num.done { background: var(--success); }
+  .step-content { flex: 1; padding-top: 4px; }
+  .step-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .step-check { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+  .step-check.checked { background: var(--success); border-color: var(--success); }
+  .step-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .step-note { font-size: 12px; background: rgba(255,209,102,0.08); border-left: 3px solid var(--accent); color: var(--accent); padding: 8px 12px; border-radius: 0 6px 6px 0; margin-top: 8px; }
+
+  @media (max-width: 600px) {
+    .nav-btn span { display: none; }
+    .topbar-badge { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">UP<span>.</span>Auto</div>
+    <div class="login-sub">Portale riservato agli agenti</div>
+    <div class="pin-label">Codice di accesso</div>
+    <input type="password" class="pin-input" id="pin-input" placeholder="••••••" maxlength="10" autocomplete="off">
+    <button class="login-btn" onclick="checkPin()">Accedi →</button>
+    <div class="login-error" id="login-error">Codice non corretto. Riprova.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">UP<span>.</span>Auto</div>
+    <div class="topbar-badge">Agenti</div>
+    <nav class="topbar-nav">
+      <button class="nav-btn active" onclick="showSection('ai')" id="nav-ai">🤖 <span>Chiedi all'AI</span></button>
+      <button class="nav-btn" onclick="showSection('docs')" id="nav-docs">📄 <span>Documenti</span></button>
+      <button class="nav-btn" onclick="showSection('proc')" id="nav-proc">📋 <span>Procedure</span></button>
+    </nav>
+  </div>
+
+  <div class="main">
+
+    <!-- AI -->
+    <div class="section active" id="section-ai">
+      <div class="chat-container">
+        <div class="chat-header">
+          <h1>Assistente Ayvens AI</h1>
+          <p>Rispondo solo su documentazione ufficiale Ayvens. Cito sempre la fonte.</p>
+        </div>
+        <div class="quick-questions">
+          <button class="quick-q" onclick="quickAsk('Qual è la franchigia per i danni kasko?')">Franchigia danni</button>
+          <button class="quick-q" onclick="quickAsk('Come funziona la designazione del conducente?')">Designazione conducente</button>
+          <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT persona fisica?')">Docs NLT privato</button>
+          <button class="quick-q" onclick="quickAsk('Come funziona il rimborso carburante con la fuel card?')">Fuel card</button>
+          <button class="quick-q" onclick="quickAsk('Cosa succede in caso di sinistro?')">Procedura sinistro</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="msg ai">
+            <div class="msg-avatar">🤖</div>
+            <div class="msg-bubble">
+              Ciao! Sono l'assistente AI di UP Auto, addestrato sui documenti ufficiali Ayvens.<br><br>
+              Posso risponderti su contratti NLT, gestione danni, fuel card, procedure operative e modulistica.<br><br>
+              Cosa vuoi sapere?
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chat-input" placeholder="Es: Quali sono le condizioni per il recesso anticipato?" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTI -->
+    <div class="section" id="section-docs">
+      <div class="docs-container">
+        <div class="section-header">
+          <h1>Documenti Ufficiali Ayvens</h1>
+          <p>Tutti i moduli aggiornati. Scarica e condividi con i clienti.</p>
+        </div>
+        <div class="docs-grid" id="docs-grid"></div>
+      </div>
+    </div>
+
+    <!-- PROCEDURE -->
+    <div class="section" id="section-proc">
+      <div class="proc-container">
+        <div class="section-header" id="proc-header">
+          <h1>Procedure Guidate</h1>
+          <p>Checklist operative passo passo per ogni fase del processo NLT.</p>
+        </div>
+        <div class="proc-grid" id="proc-grid"></div>
+        <div class="proc-detail" id="proc-detail">
+          <button class="proc-back" onclick="closeProcedure()">← Tutte le procedure</button>
+          <div class="proc-progress"><div class="proc-progress-bar" id="proc-progress-bar" style="width:0%"></div></div>
+          <div class="proc-detail-title" id="proc-detail-title"></div>
+          <div class="step-list" id="step-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// PIN
+function checkPin() {
+  const pin = document.getElementById('pin-input').value;
+  if (pin === 'upauto') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    renderDocs();
+    renderProcedureGrid();
+  } else {
+    const err = document.getElementById('login-error');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+document.getElementById('pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPin(); });
+
+// NAV
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+}
+
+// DOCUMENTI
+const docs = [
+  { icon: '📃', name: 'MLA Consumer 2025', desc: 'Condizioni generali NLT per persone fisiche.', file: 'docs/MLA_Consumer_Ayvens_2025.pdf' },
+  { icon: '🏢', name: 'MLA Business 2025', desc: 'Condizioni generali NLT per aziende e P.IVA.', file: 'docs/MLA_Business_Ayvens_2025.pdf' },
+  { icon: '📋', name: 'Informazioni Precontrattuali', desc: 'Documento informativo obbligatorio pre-firma.', file: 'docs/Informazioni_precontrattuali.pdf' },
+  { icon: '🚗', name: 'Guida Stato e Uso Veicoli', desc: 'Standard restituzione veicoli e valutazione danni.', file: 'docs/Ayvens_Guidastatouso_Ayvens_Autoveicoli_2507.pdf' },
+  { icon: '⚠️', name: 'Limitazione Responsabilità Danni', desc: 'Condizioni limitazione responsabilità per danni.', file: 'docs/Ayvens_La_Limitazione_di_responsabilita_per_danni.pdf' },
+  { icon: '⛽', name: 'Condizioni Fuel Card', desc: 'Condizioni generali carta carburante Ayvens.', file: 'docs/Ayvens_Condizioni_Generali_Fuel_Card_02_2026.pdf' },
+  { icon: '📊', name: 'Informativa Scoring SIC', desc: 'Credit scoring e valutazione merito creditizio.', file: 'docs/AYVENS_INFORMATIVA_SCORING_SIC.pdf' },
+  { icon: '👤', name: 'Designazione Conducente', desc: 'Modulo designazione conducente responsabile.', file: 'docs/ALL_A_Designazione_resp_Cliente_Targa_2025.pdf' },
+  { icon: '🔒', name: 'DPA / GDPR', desc: 'Accordo trattamento dati personali.', file: 'docs/DPA_Pro_Controller_Ayvens_Fleet_Management_2025.pdf' },
+  { icon: '📝', name: 'Dichiarazione Stato d\'Uso', desc: 'Modulo dichiarazione stato veicolo a fine contratto.', file: 'docs/Ayvens_Dichiarazione_Guida_Stato_DUso__2025_07_Ayvens.pdf' },
+  { icon: '➕', name: 'Modulo Servizi Aggiuntivi', desc: 'Attivazione servizi opzionali (pneumatici, ecc.).', file: 'docs/Mod_Serv_Agg.pdf' },
+  { icon: '🏦', name: 'Modulo SEPA', desc: 'Autorizzazione addebito diretto SEPA.', file: 'docs/Modulo_SEPA.pdf' },
+];
+
+function renderDocs() {
+  document.getElementById('docs-grid').innerHTML = docs.map(d => `
+    <div class="doc-card">
+      <div class="doc-icon">${d.icon}</div>
+      <div class="doc-name">${d.name}</div>
+      <div class="doc-desc">${d.desc}</div>
+      <a class="doc-download" href="${d.file}" download>↓ Scarica PDF</a>
+    </div>
+  `).join('');
+}
+
+// PROCEDURE
+const procedures = [
+  {
+    id: 'privato', tag: 'NLT Consumer',
+    title: 'Attivazione NLT — Persona Fisica',
+    desc: 'Dal primo contatto alla firma per un cliente privato.',
+    steps: [
+      { title: 'Raccogliere dati anagrafici', body: 'Nome, cognome, data e luogo di nascita, codice fiscale, documento d\'identità valido, residenza, email e telefono.', note: 'Documento non scaduto. Accettati: Carta d\'identità, Passaporto, Patente.' },
+      { title: 'Verificare merito creditizio', body: 'Ayvens effettua scoring SIC automatico. Consegnare al cliente l\'Informativa Scoring prima di procedere.', note: 'Non promettere approvazione. Lo scoring è automatico e insindacabile.' },
+      { title: 'Inviare preventivo', body: 'Generare il preventivo da MyAyvens con veicolo, durata, km annui e servizi. Inviare via email in modo chiaro.' },
+      { title: 'Raccogliere documentazione reddito', body: 'Dipendente: ultime 2 buste paga. Autonomo/pensionato: ultimo 730 o Unico.' },
+      { title: 'Inviare moduli da firmare', body: 'MLA Consumer 2025, Informazioni precontrattuali, Modulo SEPA, DPA/GDPR, Designazione conducente (se diverso dall\'intestatario).', note: 'Tutti i documenti devono essere firmati PRIMA dell\'ordine.' },
+      { title: 'Caricare pratica su MyAyvens', body: 'Inserire dati e allegare documenti scansionati. Verificare completezza prima di inviare.' },
+      { title: 'Attendere approvazione Ayvens', body: 'Tempi medi: 24-48 ore lavorative. Se richiedono documenti aggiuntivi, rispondere entro 24h.' },
+      { title: 'Confermare ordine e consegna', body: 'Comunicare approvazione, data stimata consegna e modalità (ritiro o consegna a domicilio).', note: 'Non comunicare date certe prima di conferma scritta da Ayvens.' },
+    ]
+  },
+  {
+    id: 'business', tag: 'NLT Business',
+    title: 'Attivazione NLT — P.IVA / Azienda',
+    desc: 'Procedura per liberi professionisti, ditte e società.',
+    steps: [
+      { title: 'Identificare il tipo di soggetto', body: 'Libero professionista P.IVA / Ditta individuale / Società di persone (SNC,SAS) / Società di capitali (SRL,SPA). La documentazione richiesta cambia.' },
+      { title: 'Raccogliere dati aziendali', body: 'Ragione sociale, P.IVA, codice fiscale, sede legale, PEC, dati del legale rappresentante con documento valido.' },
+      { title: 'Richiedere bilanci o dichiarazioni', body: 'Società: ultimi 2 bilanci. Professionisti/ditte: ultimi 2 modelli Unico. Verificare solidità prima di procedere.' },
+      { title: 'Inviare preventivo MLA Business', body: 'Usare il template MLA Business 2025. Indicare la deducibilità fiscale applicabile al profilo cliente.' },
+      { title: 'Far firmare documentazione', body: 'MLA Business 2025, Informazioni precontrattuali, SEPA, DPA, Designazione conducente, Modulo Servizi Aggiuntivi se richiesto.' },
+      { title: 'Caricare pratica su MyAyvens', body: 'Sezione Business. Verificare corrispondenza con visura camerale aggiornata (max 3 mesi).' },
+      { title: 'Gestire approvazione', body: 'Tempi: 48-72 ore. Per flotte >3 veicoli contattare direttamente il referente commerciale Ayvens.' },
+    ]
+  },
+  {
+    id: 'sinistro', tag: 'Post Vendita',
+    title: 'Gestione Sinistro',
+    desc: 'Cosa fare e comunicare al cliente in caso di incidente o danno.',
+    steps: [
+      { title: 'Raccogliere informazioni sul sinistro', body: 'Data, ora, luogo. Targa veicolo. Dati controparte (se presente): generalità, targa, assicurazione, numero polizza.' },
+      { title: 'Verificare copertura assicurativa', body: 'Consultare il contratto NLT del cliente: RCA base, kasko, o limitazione responsabilità danni attiva.' },
+      { title: 'Indirizzare al numero Ayvens', body: 'Il cliente deve chiamare il numero di assistenza Ayvens indicato nel contratto. Non gestire direttamente il sinistro.', note: 'Il numero è sulla tessera assicurativa nel veicolo e nel contratto firmato.' },
+      { title: 'Compilare CID se necessario', body: 'In caso di scontro tra veicoli, compilare il modulo CID sul posto con la controparte. Entrambi devono firmare.' },
+      { title: 'Comunicare la franchigia', body: 'Verificare dal contratto la franchigia applicabile. Consultare doc "Limitazione Responsabilità Danni" Ayvens per dettagli.' },
+      { title: 'Aggiornare CRM GHL', body: 'Aprire ticket nella pipeline "Sinistro/Problema Veicolo". Inserire tutti i dettagli. Follow-up a 7 giorni.' },
+    ]
+  },
+  {
+    id: 'km', tag: 'Gestione Contratto',
+    title: 'Adeguamento Chilometri',
+    desc: 'Come gestire clienti sopra o sotto i km contrattuali.',
+    steps: [
+      { title: 'Identificare la situazione km', body: 'Confrontare km percorsi a metà contratto con il piano previsto. Scarto >20%: contattare il cliente.' },
+      { title: 'Contattare il cliente in modo proattivo', body: 'Non aspettare la fine del contratto. Contattare via WhatsApp o telefono con i dati alla mano. Tono consulenziale.' },
+      { title: 'Calcolare l\'opzione migliore', body: 'Confrontare costo adeguamento ora vs penale a fine contratto. Generare preventivo comparativo da MyAyvens.', note: 'Il costo km extra a fine contratto è solitamente più alto dell\'adeguamento in corso.' },
+      { title: 'Inviare proposta scritta', body: 'Inviare via email/WhatsApp: km attuali, km previsti, differenza, costo adeguamento, costo alternativo a scadenza.' },
+      { title: 'Raccogliere approvazione e procedere', body: 'Far confermare per iscritto (email o WhatsApp). Procedere con modifica contrattuale su MyAyvens.' },
+      { title: 'Aggiornare CRM GHL', body: 'Spostare nella pipeline "Adeguamento KM". Impostare prossimo monitoraggio a 6 mesi.' },
+    ]
+  },
+];
+
+let currentProc = null;
+let checkedSteps = {};
+
+function renderProcedureGrid() {
+  document.getElementById('proc-grid').innerHTML = procedures.map(p => `
+    <div class="proc-card" onclick="openProcedure('${p.id}')">
+      <div class="proc-card-tag">${p.tag}</div>
+      <div class="proc-card-title">${p.title}</div>
+      <div class="proc-card-desc">${p.desc}</div>
+      <div class="proc-card-steps">📌 ${p.steps.length} passaggi</div>
+    </div>
+  `).join('');
+}
+
+function openProcedure(id) {
+  const proc = procedures.find(p => p.id === id);
+  if (!proc) return;
+  currentProc = proc;
+  if (!checkedSteps[id]) checkedSteps[id] = {};
+
+  document.getElementById('proc-grid').style.display = 'none';
+  document.getElementById('proc-header').style.display = 'none';
+  document.getElementById('proc-detail-title').textContent = proc.title;
+
+  document.getElementById('step-list').innerHTML = proc.steps.map((s, i) => {
+    const checked = !!checkedSteps[id][i];
+    return `
+      <div class="step-item">
+        <div class="step-num ${checked ? 'done' : ''}" id="snum-${i}">${checked ? '✓' : i+1}</div>
+        <div class="step-content">
+          <div class="step-title">
+            <div class="step-check ${checked ? 'checked' : ''}" onclick="toggleStep(${i})" id="schk-${i}">
+              ${checked ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+            </div>
+            ${s.title}
+          </div>
+          <div class="step-body">${s.body}</div>
+          ${s.note ? `<div class="step-note">⚠️ ${s.note}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  updateProgress();
+  document.getElementById('proc-detail').classList.add('active');
+}
+
+function toggleStep(i) {
+  const id = currentProc.id;
+  checkedSteps[id][i] = !checkedSteps[id][i];
+  const checked = checkedSteps[id][i];
+  const chk = document.getElementById(`schk-${i}`);
+  const num = document.getElementById(`snum-${i}`);
+  chk.className = `step-check ${checked ? 'checked' : ''}`;
+  chk.innerHTML = checked ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '';
+  num.className = `step-num ${checked ? 'done' : ''}`;
+  num.textContent = checked ? '✓' : i+1;
+  updateProgress();
+}
+
+function updateProgress() {
+  const id = currentProc.id;
+  const total = currentProc.steps.length;
+  const done = Object.values(checkedSteps[id]).filter(Boolean).length;
+  document.getElementById('proc-progress-bar').style.width = Math.round((done/total)*100) + '%';
+}
+
+function closeProcedure() {
+  document.getElementById('proc-detail').classList.remove('active');
+  document.getElementById('proc-grid').style.display = 'grid';
+  document.getElementById('proc-header').style.display = 'block';
+  currentProc = null;
+}
+
+// AI CHAT
+const SYSTEM_PROMPT = `Sei l'assistente AI interno di UP Auto Noleggio, agente monomandatario Ayvens.
+Rispondi ESCLUSIVAMENTE in base alla documentazione ufficiale Ayvens: MLA Consumer 2025, MLA Business 2025, Informazioni precontrattuali, Guida Stato e Uso Veicoli, Limitazione Responsabilità Danni, Condizioni Fuel Card, Informativa Scoring SIC, Designazione Conducente, DPA/GDPR, Modulo SEPA, Modulo Servizi Aggiuntivi.
+
+Sei rivolto agli AGENTI di UP Auto, non ai clienti finali. Linguaggio professionale e diretto.
+
+Regole:
+1. Rispondi sempre in italiano
+2. Cita sempre il documento fonte (es: "Secondo il MLA Consumer 2025...")
+3. Se non hai certezza, dillo e suggerisci di verificare con il back office Ayvens
+4. Non inventare condizioni, importi o procedure non presenti nei documenti
+5. Risposte concise e operative
+6. Per casi complessi, suggerisci di contattare direttamente Ayvens`;
+
+let chatHistory = [];
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage('user', text);
+  input.value = '';
+  autoResize(input);
+  document.getElementById('send-btn').disabled = true;
+  chatHistory.push({ role: 'user', content: text });
+
+  const typingId = addTyping();
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, messages: chatHistory })
+    });
+
+    const data = await response.json();
+    removeTyping(typingId);
+
+    const reply = data.content?.[0]?.text || 'Errore nella risposta. Riprova.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    addMessage('ai', reply);
+  } catch (err) {
+    removeTyping(typingId);
+    addMessage('ai', 'Errore di connessione. Riprova tra qualche secondo.');
+  }
+
+  document.getElementById('send-btn').disabled = false;
+}
+
+function addMessage(role, text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  const formatted = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  div.innerHTML = `<div class="msg-avatar">${role === 'user' ? '👤' : '🤖'}</div><div class="msg-bubble">${formatted}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function addTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  const id = 'typing-' + Date.now();
+  div.className = 'msg ai'; div.id = id;
+  div.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+function quickAsk(q) { document.getElementById('chat-input').value = q; sendMessage(); }
+
+function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 140) + 'px'; }
+</script>
+</body>
+</html>
