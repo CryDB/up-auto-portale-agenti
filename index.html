@@ -139,6 +139,52 @@
   .step-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
   .step-note { font-size: 12px; background: rgba(255,209,102,0.08); border-left: 3px solid var(--accent); color: var(--accent); padding: 8px 12px; border-radius: 0 6px 6px 0; margin-top: 8px; }
 
+
+  .update-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 14px;
+    border-left: 4px solid var(--brand);
+  }
+  .update-card.urgent { border-left-color: var(--danger); }
+  .update-card.info { border-left-color: var(--accent); }
+  .update-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .update-date {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .update-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(74,74,175,0.2);
+    color: var(--brand-light);
+  }
+  .update-tag.urgent { background: rgba(248,113,113,0.15); color: var(--danger); }
+  .update-tag.info { background: rgba(255,209,102,0.15); color: var(--accent); }
+  .update-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+  .update-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .update-body strong { color: var(--text); }
+
   @media (max-width: 600px) {
     .nav-btn span { display: none; }
     .topbar-badge { display: none; }
@@ -168,6 +214,7 @@
       <button class="nav-btn active" onclick="showSection('ai')" id="nav-ai">🤖 <span>Chiedi all'AI</span></button>
       <button class="nav-btn" onclick="showSection('docs')" id="nav-docs">📄 <span>Documenti</span></button>
       <button class="nav-btn" onclick="showSection('proc')" id="nav-proc">📋 <span>Procedure</span></button>
+      <button class="nav-btn" onclick="showSection('updates')" id="nav-updates">📢 <span>Aggiornamenti</span></button>
     </nav>
   </div>
 
@@ -234,6 +281,17 @@
       </div>
     </div>
 
+
+    <!-- AGGIORNAMENTI -->
+    <div class="section" id="section-updates">
+      <div class="docs-container">
+        <div class="section-header">
+          <h1>Aggiornamenti Ayvens</h1>
+          <p>Comunicazioni ufficiali ricevute da Alessandra Barile e dal team Ayvens. Fonte: email operative 2025-2026.</p>
+        </div>
+        <div id="updates-list"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -246,6 +304,7 @@ function checkPin() {
     document.getElementById('app').style.display = 'block';
     renderDocs();
     renderProcedureGrid();
+    renderUpdates();
   } else {
     const err = document.getElementById('login-error');
     err.style.display = 'block';
@@ -500,6 +559,103 @@ function quickAsk(q) { document.getElementById('chat-input').value = q; sendMess
 function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
 function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 140) + 'px'; }
+
+
+// AGGIORNAMENTI AYVENS
+const ayvensUpdates = [
+  {
+    date: '18/06/2026',
+    tag: 'Operativo',
+    type: 'urgent',
+    title: 'Alessandra assente fino al 22 giugno 2026',
+    body: 'Alessandra Barile è fuori sede fino a lunedì 22 giugno 2026. Rimangono attive le caselle di sales support: <strong>networkconsultant.it@aldautomotive.com</strong>'
+  },
+  {
+    date: '16/06/2026',
+    tag: 'Inviti a Fatturare',
+    type: 'urgent',
+    title: 'Malfunzionamento portale SalesNetwork - maggio 2026',
+    body: 'A causa di un malfunzionamento del portale SalesNetwork, la mail di avviso per gli inviti a fatturare di <strong>maggio 2026 non è stata inviata</strong>. Controllare manualmente il portale per recuperare gli inviti.'
+  },
+  {
+    date: '15/06/2026',
+    tag: 'Procedure',
+    type: 'urgent',
+    title: 'A/S - NON fare in autonomia senza ok via case',
+    body: 'Confermato: non è possibile fare A/S in autonomia senza autorizzazione del reparto tramite case. Prima di qualsiasi A/S aprire case e attendere ok. Chiedere ad Alessandra di coordinare.'
+  },
+  {
+    date: '12/05/2026',
+    tag: 'Fidelity',
+    type: 'info',
+    title: 'Campagna Fidelity Spring 2026 - Update Maggio',
+    body: 'Quotazioni aggiornate per scadenze flotta Ayvens fino a <strong>marzo 2027</strong>. BHEV/PEV: ET sempre Standard (Fidelity Spring 2026). Validità quotazioni: <strong>31 luglio 2026</strong>, richiamabili da Quoter. Esclusi: contratti già estesi, terminati, in rinnovo.'
+  },
+  {
+    date: '21/05/2026',
+    tag: 'Istruttoria',
+    type: 'urgent',
+    title: 'Consumer con datore di lavoro ESTERO - Rental Income',
+    body: '<strong>IMPORTANTE:</strong> L'istruttoria per Consumer con datore di lavoro estero deve essere effettuata selezionando "Rental Income" come Tipo di contratto. Istruttoria errata = pratica da reistruire. <strong>VIETATO</strong>: rapporti commerciali con soggetti residenti a San Marino.'
+  },
+  {
+    date: '20/05/2026',
+    tag: 'Prelease',
+    type: 'info',
+    title: 'Prelease pari canone per ritardo ordine - condizioni',
+    body: 'Il prelease pari canone per ritardo d'ordine è possibile <strong>solo trascorsi 2 mesi</strong> dalla prima data di prevista consegna. Prima dei 2 mesi non è attivabile.'
+  },
+  {
+    date: '28/05/2026',
+    tag: 'Fuel Card',
+    type: 'info',
+    title: 'Ritiro veicolo senza fuel card - regola',
+    body: 'Il veicolo deve essere ritirato <strong>anche senza fuel card</strong>. Non attendere la carta per procedere al ritiro. In caso contrario vengono addebitate le spese al broker. (Una tantum già concessa in precedenza.)'
+  },
+  {
+    date: '30/01/2026',
+    tag: 'Anomalie',
+    type: 'urgent',
+    title: 'A/S per cambio veicolo/listino - procedura emergenza',
+    body: 'Per anomalie nel flusso A/S con cambio Catalog Vehicle: usare funzione <strong>"AS Cancelled"</strong> in Quoter. Chiedere ad Alessandra di inserire nel case la richiesta di annullamento. Nelle note: "As cancelled del [vecchio ordine] inviare a [dealer]". Causa: limitazioni tecniche aggiornamento Miles.'
+  },
+  {
+    date: '2025/2026',
+    tag: 'Generale',
+    type: 'info',
+    title: 'Super Bollo - FUORI dal canone',
+    body: 'Il <strong>super bollo è escluso dal canone NLT</strong>. Non è incluso nel canone mensile e va gestito separatamente. Comunicare ai clienti soggetti a super bollo.'
+  },
+  {
+    date: '2025/2026',
+    tag: 'Privacy',
+    type: 'info',
+    title: 'Privacy obbligatoria nei contratti tzero',
+    body: 'Verificare sempre che la <strong>privacy firmata dal cliente sia presente in OLSA</strong> prima di completare il tzero. Alcuni contratti tzero erano stati completati senza flaggare "privacy missing". In caso di mancanza, procedere con regolarizzazione.'
+  },
+  {
+    date: '2025',
+    tag: 'Scoring',
+    type: 'info',
+    title: 'Anomalie reddituali - Unico 2024 assente',
+    body: 'In caso di Unico 2024 non disponibile o assente: inserire <strong>CU2025</strong> come documento alternativo per la valutazione del merito creditizio.'
+  },
+];
+
+function renderUpdates() {
+  const container = document.getElementById('updates-list');
+  container.innerHTML = ayvensUpdates.map(u => `
+    <div class="update-card ${u.type}">
+      <div class="update-meta">
+        <span class="update-date">📅 ${u.date}</span>
+        <span class="update-tag ${u.type}">${u.tag}</span>
+      </div>
+      <div class="update-title">${u.title}</div>
+      <div class="update-body">${u.body}</div>
+    </div>
+  `).join('');
+}
+
 </script>
 </body>
 </html>
