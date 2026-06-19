@@ -323,18 +323,29 @@ function showSection(name) {
 
 // DOCUMENTI
 const docs = [
-  { icon: '📃', name: 'MLA Consumer 2025', desc: 'Condizioni generali NLT per persone fisiche.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/MLA_Consumer_Ayvens_2025.pdf' },
-  { icon: '🏢', name: 'MLA Business 2025', desc: 'Condizioni generali NLT per aziende e P.IVA.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/MLA_Business_Ayvens_2025.pdf' },
-  { icon: '📋', name: 'Informazioni Precontrattuali', desc: 'Documento informativo obbligatorio pre-firma.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Informazioni_precontrattuali.pdf' },
-  { icon: '🚗', name: 'Guida Stato e Uso Veicoli', desc: 'Standard restituzione veicoli e valutazione danni.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Ayvens_Guidastatouso_Ayvens_Autoveicoli_2507.pdf' },
-  { icon: '⚠️', name: 'Limitazione Responsabilità Danni', desc: 'Condizioni limitazione responsabilità per danni.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Ayvens_La_Limitazione_di_responsabilita_per_danni.pdf' },
-  { icon: '⛽', name: 'Condizioni Fuel Card', desc: 'Condizioni generali carta carburante Ayvens.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Ayvens_Condizioni_Generali_Fuel_Card_02_2026.pdf' },
-  { icon: '📊', name: 'Informativa Scoring SIC', desc: 'Credit scoring e valutazione merito creditizio.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/AYVENS_INFORMATIVA_SCORING_SIC.pdf' },
-  { icon: '👤', name: 'Designazione Conducente', desc: 'Modulo designazione conducente responsabile.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/ALL_A_Designazione_resp_Cliente_Targa_2025.pdf' },
-  { icon: '🔒', name: 'DPA / GDPR', desc: 'Accordo trattamento dati personali.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/DPA_Pro_Controller_Ayvens_Fleet_Management_2025.pdf' },
-  { icon: '📝', name: 'Dichiarazione Stato d\'Uso', desc: 'Modulo dichiarazione stato veicolo a fine contratto.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Ayvens_Dichiarazione_Guida_Stato_DUso__2025_07_Ayvens.pdf' },
-  { icon: '➕', name: 'Modulo Servizi Aggiuntivi', desc: 'Attivazione servizi opzionali (pneumatici, ecc.).', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Mod_Serv_Agg.pdf' },
-  { icon: '🏦', name: 'Modulo SEPA', desc: 'Autorizzazione addebito diretto SEPA.', file: 'https://raw.githubusercontent.com/CryDB/up-auto-portale-agenti/main/docs/Modulo_SEPA.pdf' },
+  { icon: "📃", name: "MLA Consumer 2025", desc: "Condizioni generali NLT per persone fisiche.", file: "https://drive.google.com/file/d/181nCoYPAmXVf1lgmbQaZFLcSAKAwUMg3/view" },
+  { icon: "🏢", name: "MLA Business 2025", desc: "Condizioni generali NLT per aziende e P.IVA.", file: "https://drive.google.com/file/d/1UmJ3_5keOWwPPdY8_8NJKTSskGRdfwLX/view" },
+  { icon: "🚗", name: "MLA Fleet Management 2025", desc: "Contratti NLT per gestione flotte aziendali.", file: "https://drive.google.com/file/d/1tny9VmFymYwTaH4obVfe-tQdpuPkdNBA/view" },
+  { icon: "🤝", name: "MLA Corporate Carsharing 2025", desc: "Condizioni NLT per carsharing aziendale.", file: "https://drive.google.com/file/d/1EnBv-oJkuYZNWD28bKPp7llAoJp2Q72a/view" },
+  { icon: "📋", name: "Informazioni Precontrattuali", desc: "Documento obbligatorio da consegnare pre-firma.", file: "https://drive.google.com/file/d/16Ck5aB64Kdab_Ne2SLVrZxZ-JF_M9-jU/view" },
+  { icon: "🚗", name: "Guida Stato e Uso - Auto", desc: "Standard restituzione veicoli auto.", file: "https://drive.google.com/file/d/1nCU__OLyneNGMcOHo0dZV5N6sTbHCylI/view" },
+  { icon: "🏍️", name: "Guida Stato e Uso - Moto", desc: "Standard restituzione veicoli moto.", file: "https://drive.google.com/file/d/11j6AJPblhMjbh1Bb2D5C27c1wpnG3muH/view" },
+  { icon: "🚐", name: "Guida Stato e Uso - LCV", desc: "Standard restituzione veicoli commerciali.", file: "https://drive.google.com/file/d/16IWs6Vn6QQ42sM0tZK1jWEMFhvBD6LKz/view" },
+  { icon: "⛽", name: "Condizioni Fuel Card 02/2026", desc: "Condizioni generali carta carburante Ayvens.", file: "https://drive.google.com/file/d/18ZqSRwwPX9ILTcW7iOMdw9n_w-J5e-CD/view" },
+  { icon: "📊", name: "Informativa Scoring SIC", desc: "Credit scoring e valutazione merito creditizio.", file: "https://drive.google.com/file/d/14lRayjoyBxIMziAA90bw3SRjSAye1jzW/view" },
+  { icon: "👤", name: "Designazione Conducente", desc: "Modulo designazione conducente responsabile.", file: "https://drive.google.com/file/d/1P3wJhYzZzDq1flBcxGvP3U4k8Sp3jKCY/view" },
+  { icon: "🔒", name: "DPA / GDPR 2025", desc: "Accordo trattamento dati personali.", file: "https://drive.google.com/file/d/1TzL4f5-NI-_sJKVFIe5tZ774C6i9LKyS/view" },
+  { icon: "📝", name: "Dichiarazione Stato d'Uso 2025", desc: "Modulo dichiarazione stato veicolo a fine contratto.", file: "https://drive.google.com/file/d/1zDGruGPsJlbKue1bsaW_vv2SM2otPEGE/view" },
+  { icon: "➕", name: "Modulo Servizi Aggiuntivi", desc: "Attivazione pneumatici, auto sostitutiva, ecc.", file: "https://drive.google.com/file/d/1MJbGa7ihbOsH_Np0kMRIFYeXEa646cmk/view" },
+  { icon: "🏦", name: "Modulo SEPA", desc: "Autorizzazione addebito diretto SEPA.", file: "https://drive.google.com/file/d/19w9qz-00Q6Tn6Jb2cvd-jGx-e0jRYAvr/view" },
+  { icon: "⚡", name: "Addendum Ayvens Electric 2025", desc: "Servizi di ricarica veicoli elettrici.", file: "https://drive.google.com/file/d/1lUiIcmdJXGxxc7jQzJ-w736q8xTkKmys/view" },
+  { icon: "🔌", name: "Addendum Easy Wallbox PlugnPlay", desc: "Servizio wallbox domestica Ayvens.", file: "https://drive.google.com/file/d/1NyDBunjr1-CyscfApDncMR_1NkBzL6nL/view" },
+  { icon: "⭐", name: "Addendum Ayvens Easy 2025", desc: "Servizi aggiuntivi Ayvens Easy.", file: "https://drive.google.com/file/d/1Po0qxBI0S9Chtt8W5MFp1ymnF2ocCX03/view" },
+  { icon: "📡", name: "Appendice Servizi Telematici 2025", desc: "Condizioni servizi telematici e connettività.", file: "https://drive.google.com/file/d/1upl8dW77zBaCdsPSU8I7G2ESXJnkdcNf/view" },
+  { icon: "💰", name: "Netting Deposito Cauzionale", desc: "Condizioni netting e deposito cauzionale.", file: "https://drive.google.com/file/d/1ze0rzTzvrxT2OIeS3QLv2EYKWNTCKc0Q/view" },
+  { icon: "🏪", name: "Lettera di Netting Dealer", desc: "Accordo netting con il dealer.", file: "https://drive.google.com/file/d/1kLaCXb5s106vnhtXwmLBtGoEVpN4MvHU/view" },
+  { icon: "👥", name: "Patti in Deroga ALD4Staff", desc: "Condizioni speciali per dipendenti ALD.", file: "https://drive.google.com/file/d/1vxgusNpLwGsSpA0VhTRUk_uYClil2aqR/view" },
+  { icon: "🏭", name: "Questionnaire Microenterprises", desc: "Questionario per micro imprese.", file: "https://drive.google.com/file/d/1nk5igU8jzg0ldjnrHhEWHdhjMT_pXUvr/view" },
 ];
 
 function renderDocs() {
@@ -343,7 +354,7 @@ function renderDocs() {
       <div class="doc-icon">${d.icon}</div>
       <div class="doc-name">${d.name}</div>
       <div class="doc-desc">${d.desc}</div>
-      <a class="doc-download" href="${d.file}" download>↓ Scarica PDF</a>
+      <a class="doc-download" href="${d.file}" target="_blank">↓ Apri / Scarica</a>
     </div>
   `).join('');
 }
