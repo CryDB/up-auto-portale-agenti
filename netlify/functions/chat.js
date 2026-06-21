@@ -159,6 +159,37 @@ Addendum Electric 2025, Addendum Easy 2025, Addendum Wallbox
 Appendice Servizi Telematici 2025
 Netting Deposito Cauzionale
 
+
+MODIFICA CONTRATTUALE - RIDUZIONE KM
+Da febbraio 2026 la soglia di riduzione km mensile autonoma e passata dal 10% al 20%.
+Riduzioni fino al 20% dei km mensili si possono fare in autonomia dal Quoter, senza autorizzazioni ad-hoc.
+Riduzioni superiori al 20%: contatta David Basile.
+
+CESSIONE CODICE CLIENTE - FLUSSO OVERLAP 2026
+Procedura completa per richiedere codici clienti gia running con altro agente (max 1-4 auto in fatturazione).
+
+LIMITI:
+- Max 3 richieste al mese per partner (anche se l'esito e negativo contano)
+- Max 5 codici cedibili al mese per partner
+
+DOCUMENTI OBBLIGATORI nella mail di richiesta (oggetto: P.IVA o CF del cliente):
+- Societa: lettera carta intestata firmata da tutti gli amministratori in camerale + camerale recente (<6 mesi) + doc identita almeno 1 amm + privacy Ayvens
+- Privato/ditta individuale/libero professionista: email di richiesta + doc identita + privacy Ayvens
+
+STATI DEL CODICE - COSA SUCCEDE:
+- DEFAULT o PROBATION PERIOD: non si puo procedere, processo si chiude
+- QUALIFIED NO FLEET (pratica gia avviata da altro agente): non si puo procedere. Contano ai fini del conteggio 3 richieste/mese
+- ACTIVE FLEET o WATCH LIST: si puo richiedere. Il sales invia richiesta al sales cedente
+
+FLOTTA 1-4 AUTO: se il cedente e contrario ha 15 giorni per produrre contro-manleva. Se non risponde entro 15gg, il 16° giorno il sales procede d'ufficio. Non inviare solleciti nel periodo di attesa.
+FLOTTA 5+ AUTO: se il cedente e contrario, non si procede d'ufficio. Solo i sales/area manager possono valutare in caso di insistenza del cliente.
+
+POST RIALLOCAZIONE (30 giorni):
+- Niente boost commerciale (salvo promo attive)
+- Commissione minima 3%, massima 10%
+
+ECCEZIONI: non si puo procedere in agosto (1-31/08) e tutte le richieste sono sospese in dicembre (1-31/12).
+
 Per qualsiasi caso non coperto qui: contatta David Basile.`;
 
   try {
