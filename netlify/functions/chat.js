@@ -43,6 +43,7 @@ Se si aspetta la carta vengono addebitate le spese.
 
 SUPER BOLLO
 Non e incluso nel canone NLT. Va gestito separatamente.
+Fonte: comunicazione ufficiale Ayvens (oggetto: "QUOTA BOLLO FUORI DAL CANONE").
 
 CAMPAGNA FIDELITY SPRING 2026
 Quotazioni valide fino al 31 luglio 2026, richiamabili da Quoter.
@@ -60,13 +61,22 @@ Non e un KO definitivo - e un controllo antifrode automatico.
 Verificare che l'anagrafica sia correttamente inserita (dati identita, P.IVA ecc).
 Se tutto e corretto, contatta David Basile per procedere.
 
+SCORING - SOGGETTO IN BLACK LIST
+Se il soggetto risulta in black list: non si procede, nemmeno con override antifrode.
+Contatta David Basile.
+
 BLOCK SCORING
 Cliente in block scoring: non e possibile procedere con preleasing ne con nuovi ordini.
 Contatta David Basile.
 
+RISK CLASS 8
+Se scoring restituisce Risk Class 8 "Rischio default": non si puo affidare.
+Non e possibile procedere con l'ordine.
+
 AGGIORNAMENTO ANAGRAFICA
 Si puo cambiare da privato a ditta individuale o altra forma.
 Il cliente va ricensito nella nuova forma. Contatta David Basile per procedere.
+Correzione codice fiscale errato: richiedere visura camerale aggiornata e aprire ticket.
 
 PRIVACY NEI TZERO
 Verificare sempre che la privacy firmata sia presente in OLSA prima di completare.
@@ -75,36 +85,61 @@ UNICO 2024 ASSENTE
 Usare CU2025 come alternativa per la valutazione reddituale.
 
 ANOMALIE DOCUMENTALI MACROAZIENDA
-Come comunicare correttamente con Macroazienda per integrare anomalie:
+Come comunicare correttamente con Macroazienda:
 - FARE: inserire sempre in oggetto il codice cliente
 - FARE: aggiungere "in consegna" solo se la consegna e davvero prossima
 - FARE: caricare direttamente i documenti in OLSA e comunicarlo a Macroazienda
 - FARE: attendere almeno 3-5 giorni lavorativi per avere riscontro
 - NON FARE: usare numero ordine o targa come riferimento nelle comunicazioni
 - NON FARE: inviare piu volte la stessa documentazione
-- NON FARE: inviare continui solleciti (rallentano la gestione)
+- NON FARE: inviare continui solleciti
+
+MODIFICA CONTRATTUALE LONGRUN E 4VANTAGE - INSERIMENTO RELIEF
+Su prodotti LONGRUN e 4VANTAGE la modifica per inserimento relief NON si puo fare in autonomia.
+Le modifiche ad hoc sono gia pronte nel Quoter se richieste dal cliente.
+Non procedere in autonomia: aprire case.
+
+SECOND LIFE - RIMOZIONE OPZIONI
+Da marzo 2026 e possibile rimuovere in autonomia le proprie opzioni sul prodotto Second Life.
+Tutti gli utenti (sales, dealer, agenti, broker) possono gestire le opzioni con piu flessibilita.
+Le altre regole restano invariate (durata opzione, prima/seconda opzione, linea gerarchica).
+
+OFFERTE NON INTESTATE AL CLIENTE
+I sub-agenti NON possono mandare offerte/quotazioni Ayvens non intestate al cliente finale.
+Le quotazioni devono sempre essere intestate al cliente specifico.
+
+DEROGHE SU MODALITA DI PAGAMENTO
+Non vengono effettuate deroghe su modalita di pagamento per codici fiscali con flotte esigue.
+
+BONIFICO ANTICIPO/DEPOSITO
+Il bonifico di pagamento anticipo/deposito NON deve essere inviato ad Ayvens.
+Ayvens non gestisce incassi. Il processo di sblocco ordini e standardizzato e separato.
+
+CEDERE CODICE CLIENTE - OVERLAP 15 GIORNI
+Per volture di clienti active fleet su sales direct: rispettare la nuova procedura overlap 15 giorni.
+Contatta David Basile per verificare la fattibilita.
 
 HR6 - CLIENTI CON PAGAMENTI IN RITARDO
 HR6 = clienti che nei primi 6 mesi dal ritiro non hanno pagato almeno 3 canoni a scadenza.
-E un KPI contrattuale importante. Monitorare i propri clienti e intervenire proattivamente.
+E un KPI contrattuale importante. Monitorare e intervenire proattivamente.
+
+AUMENTO CANONE
+Ogni mese arriva un file Excel da compilare per gli aumenti canone del mese successivo.
+Deadline: solitamente il 26-27 del mese precedente.
+Campo "NOTE": usare solo le casistiche del menu a tendina. Non inventare valori.
 
 INVITI A FATTURARE MAGGIO 2026
 Il portale SalesNetwork ha avuto un malfunzionamento a giugno 2026.
 La mail di avviso per gli inviti di maggio 2026 non e stata inviata automaticamente.
 Controllare manualmente il portale.
 
-AUMENTO CANONE
-Ogni mese arriva un file Excel da compilare per gli aumenti canone del mese successivo.
-Deadline: solitamente il 26-27 del mese precedente.
-Compilare e inviare entro la scadenza indicata.
+GESTIONE OPZIONI SU TELAI IN PRIORITA
+Quando una tua opzione passa in priorita 1: hai un tempo limitato (indicato nella notifica).
+Se arriva seconda opzione sullo stesso veicolo: muoversi in fretta o il telaio viene perso.
 
-CESSIONE CODICE CLIENTE LOCAL CORPORATE
-I clienti local corporate difficilmente cedono il codice.
-Richiedere a David Basile che verifica la fattibilita con Ayvens.
-
-4VANTAGE - ORDINI AD HOC
-Per veicoli 4Vantage (es. Yaris Cross): i veicoli sono spesso ad hoc e richiedono telaio specifico.
-Se non disponibile a stock, aprire case per verifica disponibilita.
+PRENOTAZIONE NON RITIRATA - ANNULLAMENTO
+Se una pre-assegnazione non viene ritirata entro i termini, viene annullata automaticamente.
+Monitorare le prenotazioni attive e i tempi di ritiro.
 
 === DOCUMENTI UFFICIALI AYVENS ===
 MLA Consumer 2025 - NLT persone fisiche
