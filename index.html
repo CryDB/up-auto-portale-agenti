@@ -185,9 +185,53 @@
   }
   .update-body strong { color: var(--text); }
 
+  /* LINK RAPIDI */
+  .quick-links-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+  .quick-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+  }
+  .quick-link-btn:hover {
+    border-color: var(--brand);
+    color: var(--brand-light);
+    background: rgba(74,74,175,0.1);
+  }
+  .quick-link-btn .ql-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--brand-light);
+    flex-shrink: 0;
+  }
+  .quick-link-btn.ext::after { content: ' ↗'; opacity: 0.5; font-size: 10px; }
+
   @media (max-width: 600px) {
     .nav-btn span { display: none; }
     .topbar-badge { display: none; }
+    .quick-links-bar { gap: 6px; padding: 8px 12px; }
+    .quick-link-btn { font-size: 11px; padding: 5px 10px; }
   }
 </style>
 </head>
@@ -218,6 +262,16 @@
     </nav>
   </div>
 
+  <!-- BARRA LINK RAPIDI -->
+  <div class="quick-links-bar">
+    <a class="quick-link-btn ext" href="https://myayvens.aldautomotive.com" target="_blank"><span class="ql-dot"></span>MyAyvens</a>
+    <a class="quick-link-btn ext" href="https://aldquoter.it" target="_blank"><span class="ql-dot"></span>Quoter</a>
+    <a class="quick-link-btn ext" href="https://contratti.noleggioupauto.it" target="_blank"><span class="ql-dot"></span>Verifica Contratti</a>
+    <a class="quick-link-btn ext" href="https://ald.mobilitysolutions.it/#/support/webform" target="_blank"><span class="ql-dot"></span>Webform Ayvens</a>
+    <a class="quick-link-btn ext" href="https://app.gohighlevel.com" target="_blank"><span class="ql-dot"></span>GHL CRM</a>
+    <a class="quick-link-btn ext" href="https://calcola.noleggioupauto.it" target="_blank"><span class="ql-dot"></span>Calcolatore NLT</a>
+  </div>
+
   <div class="main">
 
     <!-- AI -->
@@ -228,11 +282,14 @@
           <p>Rispondo solo su documentazione ufficiale Ayvens. Cito sempre la fonte.</p>
         </div>
         <div class="quick-questions">
-          <button class="quick-q" onclick="quickAsk('Qual è la franchigia per i danni kasko?')">Franchigia danni</button>
-          <button class="quick-q" onclick="quickAsk('Come funziona la designazione del conducente?')">Designazione conducente</button>
-          <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT persona fisica?')">Docs NLT privato</button>
-          <button class="quick-q" onclick="quickAsk('Come funziona il rimborso carburante con la fuel card?')">Fuel card</button>
-          <button class="quick-q" onclick="quickAsk('Cosa succede in caso di sinistro?')">Procedura sinistro</button>
+          <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT persona fisica?')">📄 Docs NLT privato</button>
+          <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT azienda o P.IVA?')">🏢 Docs NLT azienda</button>
+          <button class="quick-q" onclick="quickAsk('Come funziona la chiusura anticipata del contratto?')">🔚 Chiusura anticipata</button>
+          <button class="quick-q" onclick="quickAsk('Cosa succede in caso di sinistro? Cosa devo dire al cliente?')">🚨 Procedura sinistro</button>
+          <button class="quick-q" onclick="quickAsk('Come funziona l\'adeguamento chilometrico?')">🛣️ Adeguamento km</button>
+          <button class="quick-q" onclick="quickAsk('Qual è la procedura di riconsegna del veicolo a fine contratto?')">🔁 Riconsegna veicolo</button>
+          <button class="quick-q" onclick="quickAsk('Qual è la franchigia per i danni kasko?')">💥 Franchigia danni</button>
+          <button class="quick-q" onclick="quickAsk('Come funziona il rimborso carburante con la fuel card?')">⛽ Fuel card</button>
         </div>
         <div class="chat-messages" id="chat-messages">
           <div class="msg ai">
