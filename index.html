@@ -185,6 +185,21 @@
   }
   .update-body strong { color: var(--text); }
 
+  .ctx-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .ctx-btn:hover { border-color: var(--brand); color: var(--text); }
+  .ctx-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; opacity: 1 !important; }
+
   /* LINK RAPIDI */
   .quick-links-bar {
     display: flex;
@@ -281,7 +296,16 @@
           <h1>Assistente Ayvens AI</h1>
           <p>Rispondo solo su documentazione ufficiale Ayvens. Cito sempre la fonte.</p>
         </div>
-        <div class="quick-questions">
+        <!-- SELETTORE CONTESTO -->
+        <div id="context-selector" style="margin-bottom:12px; flex-shrink:0;">
+          <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px;">Sto lavorando su un cliente:</div>
+          <div style="display:flex; gap:8px;">
+            <button class="ctx-btn" id="ctx-privato" onclick="setContext('privato')">👤 Privato</button>
+            <button class="ctx-btn" id="ctx-azienda" onclick="setContext('azienda')">🏢 Azienda / P.IVA</button>
+            <button class="ctx-btn" id="ctx-generico" onclick="setContext('generico')" style="opacity:0.5;">🔍 Generico</button>
+          </div>
+        </div>
+        <div class="quick-questions" id="quick-questions-bar">
           <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT persona fisica?')">📄 Docs NLT privato</button>
           <button class="quick-q" onclick="quickAsk('Quali documenti servono per un NLT azienda o P.IVA?')">🏢 Docs NLT azienda</button>
           <button class="quick-q" onclick="quickAsk('Come funziona la chiusura anticipata del contratto?')">🔚 Chiusura anticipata</button>
@@ -353,6 +377,59 @@
 </div>
 
 <script>
+// CONTESTO CLIENTE
+const quickByContext = {
+  privato: [
+    { label: '📄 Documenti richiesti', q: 'Quali documenti servono per un NLT persona fisica (dipendente, pensionato, autonomo)?' },
+    { label: '📊 Scoring creditizio', q: 'Come funziona lo scoring creditizio per un cliente privato? Cosa valuta Ayvens?' },
+    { label: '✍️ Moduli da firmare', q: 'Quali moduli deve firmare un cliente privato per attivare un NLT Consumer?' },
+    { label: '🔚 Chiusura anticipata', q: 'Come funziona la chiusura anticipata per un contratto Consumer? Ci sono penali?' },
+    { label: '🛣️ Adeguamento km', q: 'Come funziona l\'adeguamento chilometrico per un privato?' },
+    { label: '🔁 Riconsegna veicolo', q: 'Qual è la procedura di riconsegna del veicolo a fine contratto per un privato?' },
+    { label: '🚨 Sinistro', q: 'Cosa deve fare un cliente privato in caso di sinistro?' },
+    { label: '⛽ Fuel card', q: 'Come funziona la fuel card per un cliente Consumer?' },
+  ],
+  azienda: [
+    { label: '📄 Documenti richiesti', q: 'Quali documenti servono per un NLT Business (SRL, ditta individuale, libero professionista)?' },
+    { label: '📊 Scoring aziende', q: 'Come funziona lo scoring creditizio per un\'azienda o P.IVA? Cosa valuta Ayvens?' },
+    { label: '✍️ Moduli da firmare', q: 'Quali moduli deve firmare un\'azienda per attivare un NLT Business?' },
+    { label: '🔚 Chiusura anticipata', q: 'Come funziona la chiusura anticipata per un contratto Business? Ci sono penali?' },
+    { label: '👤 Designazione conducente', q: 'Come funziona la designazione del conducente per un contratto Business?' },
+    { label: '🛣️ Adeguamento km', q: 'Come funziona l\'adeguamento chilometrico per un\'azienda con flotta?' },
+    { label: '🔁 Riconsegna veicolo', q: 'Qual è la procedura di riconsegna del veicolo a fine contratto Business?' },
+    { label: '🚨 Sinistro', q: 'Cosa deve fare un\'azienda in caso di sinistro su un veicolo NLT?' },
+  ],
+  generico: [
+    { label: '📄 Docs NLT privato', q: 'Quali documenti servono per un NLT persona fisica?' },
+    { label: '🏢 Docs NLT azienda', q: 'Quali documenti servono per un NLT azienda o P.IVA?' },
+    { label: '🔚 Chiusura anticipata', q: 'Come funziona la chiusura anticipata del contratto?' },
+    { label: '🚨 Procedura sinistro', q: 'Cosa succede in caso di sinistro? Cosa devo dire al cliente?' },
+    { label: '🛣️ Adeguamento km', q: 'Come funziona l\'adeguamento chilometrico?' },
+    { label: '🔁 Riconsegna veicolo', q: 'Qual è la procedura di riconsegna del veicolo a fine contratto?' },
+    { label: '💥 Franchigia danni', q: 'Qual è la franchigia per i danni kasko?' },
+    { label: '⛽ Fuel card', q: 'Come funziona il rimborso carburante con la fuel card?' },
+  ]
+};
+
+let currentContext = 'generico';
+
+function setContext(ctx) {
+  currentContext = ctx;
+  document.querySelectorAll('.ctx-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('ctx-' + ctx).classList.add('active');
+  renderQuickQuestions(ctx);
+}
+
+function renderQuickQuestions(ctx) {
+  const bar = document.getElementById('quick-questions-bar');
+  bar.innerHTML = quickByContext[ctx].map(item =>
+    `<button class="quick-q" onclick="quickAsk('${item.q.replace(/'/g, "\\'")}')">${item.label}</button>`
+  ).join('');
+}
+
+// Inizializza con generico
+setContext('generico');
+
 // PIN
 function checkPin() {
   const pin = document.getElementById('pin-input').value;
